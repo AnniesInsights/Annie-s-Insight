@@ -4,38 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat AI con Video</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+        }
+        #video-container {
+            flex: 1; /* Occupare tutto lo spazio disponibile a sinistra */
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        #chat-container {
+            flex: 1; /* Occupare tutto lo spazio disponibile a destra */
+            padding: 10px;
+            background-color: #ffffff;
+            border-left: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
+        }
+        #chat-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            flex-grow: 1; /* Occupare tutto lo spazio verticale rimanente */
+        }
+        input {
+            width: 70%;
+            padding: 10px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="video-section">
-            <!-- Video che cambia dinamicamente -->
-            <video id="avatar-video" controls autoplay>
-                <source id="video-source" src="video1.mp4" type="video/mp4">
-                Il tuo browser non supporta il video.
-            </video>
+
+    <div id="video-container">
+        <video id="avatar-video" controls autoplay>
+            <source id="video-source" src="video_default.mp4" type="video/mp4">
+            Il tuo browser non supporta il video.
+        </video>
+    </div>
+
+    <div id="chat-container">
+        <div id="chat-box">
+            <!-- I messaggi appariranno qui -->
         </div>
-        <div class="chat-section">
-            <div class="chat-box" id="chat-box">
-                <!-- Messaggi della chat -->
-            </div>
-            <input type="text" id="user-input" placeholder="Scrivi il tuo messaggio...">
-            <button onclick="inviaMessaggio()">Invia</button>
+        <div>
+            <input type="text" id="user-input" placeholder="Scrivi il tuo messaggio qui">
+            <button id="send-btn">Invia</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Funzione per inviare il messaggio
+        function inviaMessaggio() {
+            const input = document.getElementById('user-input'); // Campo di input
+            const chatBox = document.getElementById('chat-box'); // Div che contiene i messaggi
+
+            // Controlla se l'input è vuoto
+            if (input.value.trim() === '') {
+                return; // Non fare nulla se l'input è vuoto
+            }
+
+            // Aggiunge il messaggio dell'utente alla chat
+            const messaggioUtente = document.createElement('p');
+            messaggioUtente.textContent = "Utente: " + input.value;
+            messaggioUtente.style.fontWeight = 'bold';
+            chatBox.appendChild(messaggioUtente);
+
+            // Simula la risposta dell'AI (questo può essere personalizzato)
+            setTimeout(() => {
+                const messaggioAI = document.createElement('p');
+                messaggioAI.textContent = "AI Avatar: Sto elaborando la tua richiesta...";
+                chatBox.appendChild(messaggioAI);
+
+                // Scorri automaticamente la chat verso il basso
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
+
+            // Svuota il campo di input dopo l'invio
+            input.value = '';
+        }
+
+        // Listener per il bottone di invio
+        document.getElementById('send-btn').addEventListener('click', inviaMessaggio);
+
+        // Listener per inviare il messaggio con il tasto Enter
+        document.getElementById('user-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                inviaMessaggio();
+            }
+        });
+    </script>
+
 </body>
 </html>
-<div id="chat-container">
-    <!-- Finestra della chat dove appaiono i messaggi -->
-    <div id="chat-box" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; margin-bottom: 10px;">
-        <!-- Messaggi dell'utente e dell'AI appariranno qui -->
-    </div>
-    
-    <!-- Input per scrivere il messaggio -->
-    <input type="text" id="user-input" placeholder="Scrivi il tuo messaggio qui" style="width: 70%; padding: 10px;">
-    
-    <!-- Bottone per inviare il messaggio -->
-    <button id="send-btn" style="padding: 10px;">Invia</button>
-</div>
