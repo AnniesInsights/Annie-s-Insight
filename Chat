@@ -1,82 +1,58 @@
-// Funzione per inviare il messaggio e far rispondere l'avatar
 function inviaMessaggio() {
-    const input = document.getElementById('user-input');
-    const chatBox = document.getElementById('chat-box');
-    const avatarVideo = document.getElementById('avatar-video');
-    const videoSource = document.getElementById('video-source');
-    
-    // Messaggio dell'utente
+    const input = document.getElementById('user-input'); // Campo di input
+    const chatBox = document.getElementById('chat-box'); // Div che contiene i messaggi
+    const video = document.getElementById('avatar-video'); // Player video
+
+    // Controlla se l'input è vuoto
+    if (input.value.trim() === '') {
+        return; // Non fare nulla se l'input è vuoto
+    }
+
+    // Aggiunge il messaggio dell'utente alla chat
     const messaggioUtente = document.createElement('p');
     messaggioUtente.textContent = "Utente: " + input.value;
     messaggioUtente.style.fontWeight = 'bold';
     chatBox.appendChild(messaggioUtente);
 
-    // Risposta dell'AI e cambio video in base al messaggio dell'utente
+    // Logica per le risposte in base all'input
+    const messaggio = input.value.trim().toLowerCase(); // Ottieni l'input dell'utente
+    let videoDaRiprodurre = ""; // Variabile per memorizzare il video da riprodurre
+
+    // Condizioni per determinare quale video riprodurre
+    if (messaggio === "cosa sai fare?") {
+        videoDaRiprodurre = "Saluto.mp4"; // Sostituisci con il video corretto
+    } else if (messaggio === "mostrami un video") {
+        videoDaRiprodurre = "Saluto.mp4"; // Sostituisci con il video corretto
+    } else {
+        // Altri input e video possono essere aggiunti qui
+        videoDaRiprodurre = "Saluto.mp4"; // Video predefinito
+    }
+
+    // Riproduci il video selezionato
+    video.src = videoDaRiprodurre;
+    video.load(); // Ricarica il video
+    video.play(); // Inizia a riprodurre il video
+
+    // Aggiungi un messaggio dell'AI dopo un breve ritardo
     setTimeout(() => {
         const messaggioAI = document.createElement('p');
-        // Prendi la risposta corrispondente all'input dell'utente
-        const risposta = generaRisposta(input.value);
-        messaggioAI.textContent = "AI Avatar: " + risposta;
+        messaggioAI.textContent = "AI Avatar: Ho riprodotto il video in base alla tua richiesta.";
         chatBox.appendChild(messaggioAI);
 
-        // Cambia il video in base al contenuto del messaggio utente
-        cambiaVideo(input.value, videoSource, avatarVideo);
-
-        // Scroll automatico alla fine della chat
+        // Scorri automaticamente la chat verso il basso
         chatBox.scrollTop = chatBox.scrollHeight;
     }, 1000);
 
-    // Svuota il campo di input
+    // Svuota il campo di input dopo l'invio
     input.value = '';
 }
 
-// Funzione per cambiare il video in base al messaggio dell'utente
-function cambiaVideo(messaggio, videoSource, avatarVideo) {
-    // Scegli un video basato sul contenuto del messaggio
-    let videoFile = 'video_default.mp4'; // Video predefinito
+// Listener per il bottone di invio
+document.getElementById('send-btn').addEventListener('click', inviaMessaggio);
 
-    // Controlli per associare parole chiave a diversi video
-    if (messaggio.includes('Cosa sai fare?')) {
-        videoFile = 'Saluto.mp4';
-    } else if (messaggio.includes('consiglio')) {
-        videoFile = 'video_consiglio.mp4';
-    } else if (messaggio.includes('triste')) {
-        videoFile = 'video_triste.mp4';
-    } else if (messaggio.includes('felice')) {
-        videoFile = 'video_felice.mp4';
-    } else if (messaggio.includes('arrabbiato')) {
-        videoFile = 'video_arrabbiato.mp4';
+// Listener per inviare il messaggio con il tasto Enter
+document.getElementById('user-input').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        inviaMessaggio();
     }
-
-    // Cambia la sorgente del video
-    videoSource.src = videoFile;
-    avatarVideo.load(); // Ricarica il video con la nuova sorgente
-}
-
-// Funzione per generare risposte AI in base all'input dell'utente
-function generaRisposta(messaggio) {
-    // Mappa dei messaggi a risposte
-    const risposte = {
-        amore: "L'amore è complicato, ma il primo passo è essere sinceri.",
-        consiglio: "Ecco il mio consiglio: segui sempre il tuo cuore.",
-        triste: "Capisco che tu sia triste, ma cerca di trovare luce anche nei momenti difficili.",
-        felice: "Sono felice di sentirlo! Continua così!",
-        arrabbiato: "La rabbia è normale, ma è importante non farsi sopraffare."
-    };
-
-    // Cerca la parola chiave nel messaggio e restituisci la risposta appropriata
-    if (messaggio.includes('amore')) {
-        return risposte.amore;
-    } else if (messaggio.includes('consiglio')) {
-        return risposte.consiglio;
-    } else if (messaggio.includes('triste')) {
-        return risposte.triste;
-    } else if (messaggio.includes('felice')) {
-        return risposte.felice;
-    } else if (messaggio.includes('arrabbiato')) {
-        return risposte.arrabbiato;
-    }
-
-    // Risposta predefinita se nessuna parola chiave viene trovata
-    return "Non sono sicuro di come aiutarti, ma sono qui per ascoltare!";
-}
+});
