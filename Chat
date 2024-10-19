@@ -1,0 +1,82 @@
+// Funzione per inviare il messaggio e far rispondere l'avatar
+function inviaMessaggio() {
+    const input = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+    const avatarVideo = document.getElementById('avatar-video');
+    const videoSource = document.getElementById('video-source');
+    
+    // Messaggio dell'utente
+    const messaggioUtente = document.createElement('p');
+    messaggioUtente.textContent = "Utente: " + input.value;
+    messaggioUtente.style.fontWeight = 'bold';
+    chatBox.appendChild(messaggioUtente);
+
+    // Risposta dell'AI e cambio video in base al messaggio dell'utente
+    setTimeout(() => {
+        const messaggioAI = document.createElement('p');
+        // Prendi la risposta corrispondente all'input dell'utente
+        const risposta = generaRisposta(input.value);
+        messaggioAI.textContent = "AI Avatar: " + risposta;
+        chatBox.appendChild(messaggioAI);
+
+        // Cambia il video in base al contenuto del messaggio utente
+        cambiaVideo(input.value, videoSource, avatarVideo);
+
+        // Scroll automatico alla fine della chat
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 1000);
+
+    // Svuota il campo di input
+    input.value = '';
+}
+
+// Funzione per cambiare il video in base al messaggio dell'utente
+function cambiaVideo(messaggio, videoSource, avatarVideo) {
+    // Scegli un video basato sul contenuto del messaggio
+    let videoFile = 'video_default.mp4'; // Video predefinito
+
+    // Controlli per associare parole chiave a diversi video
+    if (messaggio.includes('Cosa sai fare?')) {
+        videoFile = 'Saluto.mp4';
+    } else if (messaggio.includes('consiglio')) {
+        videoFile = 'video_consiglio.mp4';
+    } else if (messaggio.includes('triste')) {
+        videoFile = 'video_triste.mp4';
+    } else if (messaggio.includes('felice')) {
+        videoFile = 'video_felice.mp4';
+    } else if (messaggio.includes('arrabbiato')) {
+        videoFile = 'video_arrabbiato.mp4';
+    }
+
+    // Cambia la sorgente del video
+    videoSource.src = videoFile;
+    avatarVideo.load(); // Ricarica il video con la nuova sorgente
+}
+
+// Funzione per generare risposte AI in base all'input dell'utente
+function generaRisposta(messaggio) {
+    // Mappa dei messaggi a risposte
+    const risposte = {
+        amore: "L'amore è complicato, ma il primo passo è essere sinceri.",
+        consiglio: "Ecco il mio consiglio: segui sempre il tuo cuore.",
+        triste: "Capisco che tu sia triste, ma cerca di trovare luce anche nei momenti difficili.",
+        felice: "Sono felice di sentirlo! Continua così!",
+        arrabbiato: "La rabbia è normale, ma è importante non farsi sopraffare."
+    };
+
+    // Cerca la parola chiave nel messaggio e restituisci la risposta appropriata
+    if (messaggio.includes('amore')) {
+        return risposte.amore;
+    } else if (messaggio.includes('consiglio')) {
+        return risposte.consiglio;
+    } else if (messaggio.includes('triste')) {
+        return risposte.triste;
+    } else if (messaggio.includes('felice')) {
+        return risposte.felice;
+    } else if (messaggio.includes('arrabbiato')) {
+        return risposte.arrabbiato;
+    }
+
+    // Risposta predefinita se nessuna parola chiave viene trovata
+    return "Non sono sicuro di come aiutarti, ma sono qui per ascoltare!";
+}
