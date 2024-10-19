@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat AI con Video</title>
+    <title>Video e Chat AI</title>
     <style>
         body {
             display: flex;
@@ -49,7 +49,7 @@
 
     <div id="video-container">
         <video id="avatar-video" controls autoplay>
-            <source id="video-source" src="video_default.mp4" type="video/mp4">
+            <source id="video-source" src="Saluto.mp4" type="video/mp4">
             Il tuo browser non supporta il video.
         </video>
     </div>
@@ -64,47 +64,6 @@
         </div>
     </div>
 
-    <script>
-        // Funzione per inviare il messaggio
-        function inviaMessaggio() {
-            const input = document.getElementById('user-input'); // Campo di input
-            const chatBox = document.getElementById('chat-box'); // Div che contiene i messaggi
-
-            // Controlla se l'input è vuoto
-            if (input.value.trim() === '') {
-                return; // Non fare nulla se l'input è vuoto
-            }
-
-            // Aggiunge il messaggio dell'utente alla chat
-            const messaggioUtente = document.createElement('p');
-            messaggioUtente.textContent = "Utente: " + input.value;
-            messaggioUtente.style.fontWeight = 'bold';
-            chatBox.appendChild(messaggioUtente);
-
-            // Simula la risposta dell'AI (questo può essere personalizzato)
-            setTimeout(() => {
-                const messaggioAI = document.createElement('p');
-                messaggioAI.videoContent = "Saluto.mp4";
-                chatBox.appendChild(messaggioAI);
-
-                // Scorri automaticamente la chat verso il basso
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 1000);
-
-            // Svuota il campo di input dopo l'invio
-            input.value = '';
-        }
-
-        // Listener per il bottone di invio
-        document.getElementById('send-btn').addEventListener('click', inviaMessaggio);
-
-        // Listener per inviare il messaggio con il tasto Enter
-        document.getElementById('user-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                inviaMessaggio();
-            }
-        });
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
